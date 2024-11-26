@@ -1,13 +1,14 @@
 const { google } = require("googleapis")
 const fs = require("fs")
-const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 const oAuth2 = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URL)
 const TOKEN_PATH = "token.json"
+SCOPES = ["https://www.googleapis.com/auth/spreadsheets","https://mail.google.com/"]
 
 async function authDirect(req, res) {
   const authUrl = oAuth2.generateAuthUrl({
     access_type: "offline", // This ensures we get a refresh token
-    scope: SCOPES
+    scope: SCOPES,
+    // prompt: 'consent'
   })
   res.redirect(authUrl)
 }

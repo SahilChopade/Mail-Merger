@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema(
     googleId: { type: String },
     refreshToken: { type: String },
     image: { type: String },
-    image: { type: String },
   },
   {
     timestamps: true,

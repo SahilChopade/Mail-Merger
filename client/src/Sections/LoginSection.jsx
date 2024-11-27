@@ -7,6 +7,12 @@ import { Link } from "react-router-dom"
 import PasswordField from "../Components/PasswordField"
 
 const LoginSection = () => {
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true)
+
+  const handleLogin = async () => {
+    const response = await loginUserUsingGoogle()
+    window.open(response, "_self")
+  }
   return (
     <div className="font-[Quantico] flex flex-col gap-6">
       <div className="flex flex-col gap-1">

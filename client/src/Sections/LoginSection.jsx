@@ -10,10 +10,10 @@ import { Link } from "react-router-dom"
 
 const LoginSection = () => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true)
-    
+
   const handleLogin = async () => {
     const response = await loginUserUsingGoogle()
-    console.log(response)
+    window.open(response, "_self")
   }
   return (
     <div className="font-[Quantico] flex flex-col gap-6">
@@ -51,16 +51,19 @@ const LoginSection = () => {
         <LoginIcon className="w-5 h-5" /> <div>Sign In</div>
       </button>
       <div className="flex items-center gap-1">
-        <hr className="w-full text-black"/>
+        <hr className="w-full text-black" />
         OR
-        <hr className="w-full text-black"/>
+        <hr className="w-full text-black" />
       </div>
       <div onClick={handleLogin} className="bg-slate-200 hover:bg-slate-400 cursor-pointer rounded-3xl border border-black w-full py-2.5 flex items-center justify-center gap-2 transition-all duration-150">
         <GoogleIcon className="w-6 h-6" />
         <div>Login with Google</div>
       </div>
       <div className="flex items-center gap-1">
-        <div>New & want to get started??</div> <Link className="text-blue-700 hover:drop-shadow-2xl" to="/signup">Sign Up</Link>
+        <div>New & want to get started??</div>{" "}
+        <Link className="text-blue-700 hover:drop-shadow-2xl" to="/signup">
+          Sign Up
+        </Link>
       </div>
     </div>
   )

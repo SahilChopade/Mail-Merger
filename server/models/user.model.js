@@ -4,8 +4,10 @@ const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String },
     googleId: { type: String },
+    refreshToken: { type: String },
+    image: { type: String },
   },
   {
     timestamps: true,
@@ -13,4 +15,4 @@ const userSchema = new mongoose.Schema(
 )
 
 const User = mongoose.model("User", userSchema)
-export default User
+module.exports = User

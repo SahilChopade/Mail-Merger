@@ -6,7 +6,7 @@ const mongoose = require("mongoose")
 const app = express()
 app.use(express.json({}))
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://localhost:3000"],
+  origin: ["http://localhost:3000"],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   optionsSuccessStatus: 204,
 }

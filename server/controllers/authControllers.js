@@ -1,16 +1,16 @@
 const { google } = require("googleapis")
-const fs = require("fs")
 const oAuth2 = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URL)
-const TOKEN_PATH = "token.json"
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://mail.google.com/"]
+SCOPES = ["email", "profile", "https://www.googleapis.com/auth/spreadsheets", "https://mail.google.com/"]
+const axios = require("axios")
+const authService = require("../services/authService")
 
 async function authDirect(req, res) {
   const authUrl = oAuth2.generateAuthUrl({
     access_type: "offline", // This ensures we get a refresh token
     scope: SCOPES,
-    // prompt: 'consent'
+    prompt: "consent",
   })
-  res.redirect(authUrl)
+  res.send(authUrl)
 }
 
 async function authCallback(req, res) {
@@ -18,9 +18,13 @@ async function authCallback(req, res) {
   try {
     const { tokens } = await oAuth2.getToken(code)
     oAuth2.setCredentials(tokens)
-    console.log(oAuth2)
-    fs.writeFileSync(TOKEN_PATH, JSON.stringify(tokens))
-    res.send("Authentication successful! You can now use the app.")
+    const response = await axios.get(`https://people.googleapis.com/v1/people/me?personFields=names,emailAddresses,photos`, {
+      headers: {
+        Authorization: `Bearer ${oAuth2.credentials.access_token}`,
+      },
+    })
+    const user = await authService.addUserToDb(response.data,oAuth2.credentials)
+    res.redirect(`${process.env.FE_URL}/tools`)
   } catch (error) {
     console.log(error)
     res.status(500).send("Error during authentication.")

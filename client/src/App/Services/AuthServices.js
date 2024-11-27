@@ -1,11 +1,8 @@
-import axios from "axios"
 const BE_URL = process.env.REACT_APP_BE_URL
 
-export const loginUserUsingGoogle = async () => {
+export const loginUserUsingGoogle = () => {
   try {
-    // window.open(`${BE_URL}/api/auth`, "_self")
-    const response = await axios.get(`${BE_URL}/api/auth`)
-    return response.data
+    window.open(`${BE_URL}/api/auth/google/callback`, "_self")
   } catch (error) {
     console.log(error)
   }

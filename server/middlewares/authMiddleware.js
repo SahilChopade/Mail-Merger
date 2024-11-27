@@ -1,6 +1,5 @@
 const fs = require("fs");
 const { google } = require("googleapis");
-const TOKEN_PATH = "token.json";
 const oAuth2 = new google.auth.OAuth2(
   process.env.CLIENT_ID,
   process.env.CLIENT_SECRET,

@@ -58,7 +58,7 @@ const SignUpSection = () => {
         <div>Sign Up with Google</div>
       </div>
       <div className="flex items-center gap-1">
-        <div>Already Have an Account?</div> <Link to="/login">Login Here</Link>
+        <div>Already Have an Account?</div> <Link to="/auth/login">Login Here</Link>
       </div>
     </div>
   )

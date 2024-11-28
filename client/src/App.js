@@ -1,5 +1,7 @@
 import React from "react"
 import "./App.css"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import AuthorizationPage from "./Pages/AuthorizationPage"
 import ToolsPage from "./Pages/ToolsPage"
 import { Route, Routes } from "react-router-dom"
@@ -15,6 +17,7 @@ const App = () => {
           <Route path="/auth/*" element={<AuthorizationPage />} />
         </Routes>
       </div>
+      <ToastContainer  />
     </div>
   )
 }

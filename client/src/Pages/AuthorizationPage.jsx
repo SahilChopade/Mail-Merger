@@ -1,10 +1,15 @@
-import React from "react"
+import React, { useEffect } from "react"
 import LoginSection from "../Sections/LoginSection"
 import SignUpSection from "../Sections/SignUpSection"
 import { Route, Routes } from "react-router-dom"
 import PasswordSection from "../Sections/PasswordSection"
+import { useAuth } from "../Context/UserContext"
 
 const AuthorizationPage = () => {
+  const { userFetch } = useAuth()
+  useEffect(() => {
+    userFetch()
+  }, [])
   return (
     <div className={`flex items-center h-full transition-all duration-200`}>
       <video autoPlay loop muted className="h-[calc(100dvh-6rem)] rounded-3xl">

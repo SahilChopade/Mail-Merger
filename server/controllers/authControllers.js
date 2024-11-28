@@ -1,16 +1,16 @@
 const { google } = require("googleapis")
 const oAuth2 = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URL)
-SCOPES = ["email", "profile", "https://www.googleapis.com/auth/spreadsheets", "https://mail.google.com/"]
 const axios = require("axios")
 const authService = require("../services/authService")
+const { SCOPES } = require("../constants/constants")
 
 async function authDirect(req, res) {
   const authUrl = oAuth2.generateAuthUrl({
     access_type: "offline", // This ensures we get a refresh token
     scope: SCOPES,
-    prompt: "consent",
+    // prompt: "consent",
   })
-  res.send(authUrl)
+  return res.send(authUrl)
 }
 
 async function authCallback(req, res) {
@@ -23,11 +23,17 @@ async function authCallback(req, res) {
         Authorization: `Bearer ${oAuth2.credentials.access_token}`,
       },
     })
-    const user = await authService.addUserToDb(response.data,oAuth2.credentials)
-    res.redirect(`${process.env.FE_URL}/tools`)
+    const user = await authService.addUserToDb(response.data, oAuth2.credentials)
+    res.cookie("refreshToken", user.refreshToken, {
+      maxAge: 24 * 60 * 60 * 1000, // Cookie expiry time (1 day in milliseconds)
+      httpOnly: true, // Ensures cookie is accessible only by the web server
+      secure: false, // Set to `true` if using HTTPS
+      sameSite: "strict", // Protects against CSRF attacks
+    })
+    return res.redirect(`${process.env.FE_URL}/auth/login`)
   } catch (error) {
     console.log(error)
-    res.status(500).send("Error during authentication.")
+    return res.status(500).send("Error during authentication.")
   }
 }
 

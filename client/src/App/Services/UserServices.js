@@ -1,4 +1,5 @@
 import axios from "axios"
+import { toast } from "react-toastify"
 const BE_URL = process.env.REACT_APP_BE_URL
 
 export const loginUser = async (email, password) => {
@@ -7,25 +8,28 @@ export const loginUser = async (email, password) => {
     return response.data
   } catch (error) {
     console.log(error)
+    toast.error(error.message)
   }
 }
 
 export const logOutUser = async () => {
   try {
     const response = await axios.get(`${BE_URL}/user/logout`, { withCredentials: true })
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.log(error)
+    toast.error(error.message)
   }
 }
 
 export const getUser = async (id) => {
   try {
     const response = await axios.get(`${BE_URL}/user/getUser`, { withCredentials: true })
+    console.log(response)
     return response.data
   } catch (error) {
     console.log(error)
+    toast.error(error.message)
   }
 }
 
@@ -35,5 +39,6 @@ export const setUserPassword = async (password) => {
     return response.data
   } catch (error) {
     console.log(error)
+    toast.error(error.message)
   }
 }

@@ -12,12 +12,14 @@ export const AuthProvider = ({ children }) => {
 
   const userFetch = async () => {
     const res = await getUser()
+    if (!res) return
     if (res.success) {
       setUser(res.data)
       if (res.data.isPasswordSet) {
-        navigate("/tools")
+        user && toast.success(`Welcome ${res.data.name}`)
+        navigate("/")
       } else {
-        toast.info(`Welcome ${res.data.name.split(' ')[0]},Yet to Set Password..`)
+        toast.info(`Welcome ${res.data.name.split(" ")[0]},Yet to Set Password..`)
         navigate("/auth/password")
       }
     }
@@ -29,7 +31,7 @@ export const AuthProvider = ({ children }) => {
       console.log(res.data)
       setUser(res.data)
       toast.success("Logged In Successfully..")
-      navigate("/tools")
+      navigate("/")
     } else {
       toast.error(res.message)
     }
@@ -51,7 +53,7 @@ export const AuthProvider = ({ children }) => {
     if (res.success) {
       setUser(res.data)
       toast.success(res.message)
-      navigate("/tools")
+      navigate("/")
     } else {
       toast.error(res.message)
       return

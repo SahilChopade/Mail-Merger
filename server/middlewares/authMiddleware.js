@@ -5,7 +5,7 @@ const oAuth2 = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_
 async function authMiddleware(req, res, next) {
   try {
     const refreshToken = req.cookies["refreshToken"]
-    if(!refreshToken){
+    if (!refreshToken) {
       return res.send({ success: false, message: "No Refresh Token is Set!" })
     }
     oAuth2.setCredentials({ refresh_token: refreshToken })
@@ -24,7 +24,6 @@ async function authMiddleware(req, res, next) {
     req.oAuth2 = oAuth2
     next()
   } catch (error) {
-    console.error("Error refreshing access token:", error)
     return res.status(500).send({ success: false, message: "Failed to authenticate." })
   }
 }

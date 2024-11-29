@@ -7,9 +7,11 @@ import IdCardIcon from "../Assets/IdCardIcon"
 import EyeOpenIcon from "../Assets/EyeOpenIcon"
 import EyeClosedIcon from "../Assets/EyeClosedIcon"
 import { Link } from "react-router-dom"
+import { useAuth } from "../Context/UserContext"
 
 const SignUpSection = () => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true)
+  const { googleLogin } = useAuth()
   return (
     <div className="font-[Quantico] flex flex-col gap-6">
       <div className="flex flex-col gap-1">
@@ -53,7 +55,7 @@ const SignUpSection = () => {
         OR
         <hr className="w-full text-black" />
       </div>
-      <div className="bg-slate-200 hover:bg-slate-400 cursor-pointer rounded-3xl border border-black w-full py-2.5 flex items-center justify-center gap-2 transition-all duration-150">
+      <div onClick={googleLogin} className="bg-slate-200 hover:bg-slate-400 cursor-pointer rounded-3xl border border-black w-full py-2.5 flex items-center justify-center gap-2 transition-all duration-150">
         <GoogleIcon className="w-6 h-6" />
         <div>Sign Up with Google</div>
       </div>

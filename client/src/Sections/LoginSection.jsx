@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import LoginIcon from "../Assets/LoginIcon"
 import MailIcon from "../Assets/MailIcon"
 import GoogleIcon from "../Assets/GoogleIcon"

@@ -1,23 +1,33 @@
 const axios = require("axios")
 const mailService = require("../services/mailService")
-const { decodeBase64Url, encodeBase64Url } = require("../utils/utils")
 const { transporter } = require("../services/transporter")
 
 const draftId = "r6835462327113036219"
 async function getDraftsList(req, res) {
   try {
-    const draftResponse = await axios.get(`${process.env.MAIL_ENDPOINT}/me/drafts`, {
+    const draftsListResponse = await axios.get(`${process.env.MAIL_ENDPOINT}/me/drafts`, {
       headers: {
         Authorization: `Bearer ${req.oAuth2.credentials.access_token}`,
       },
     })
-    if (draftResponse) {
-      res.send({ success: true, data: draftResponse.data.drafts })
-    } else {
-      res.send({ success: false, message: "Can't Fetch Drafts List. Try Again!!" })
+    const draftsList = draftsListResponse.data.drafts || []
+    if (draftsList.length === 0) {
+      return res.send({ success: true, message: "No Drafts Found!!" })
     }
+    const fullDrafts = await Promise.all(
+      draftsList.map(async (draft) => {
+        const draftDetailResponse = await axios.get(`${process.env.MAIL_ENDPOINT}/me/drafts/${draft.id}?format=full`, {
+          headers: {
+            Authorization: `Bearer ${req.oAuth2.credentials.access_token}`,
+          },
+        })
+        return draftDetailResponse.data
+      })
+    )
+    res.send({ success: true, data: fullDrafts })
   } catch (error) {
-    res.status(500).send({ error: "Failed to fetch data from Gmail." })
+    console.error("Error fetching drafts:", error)
+    res.status(500).send({ success: false, message: "Failed to fetch drafts from Gmail." })
   }
 }
 

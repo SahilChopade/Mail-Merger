@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        "saira": ['"Saira Stencil One"', "sans-serif"],
+        saira: ['"Saira Stencil One"', "sans-serif"],
+        noto: ["Noto Serif", "serif"],
       },
     },
   },

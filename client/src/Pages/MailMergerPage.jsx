@@ -2,32 +2,33 @@ import React, { useEffect, useState } from "react"
 import SheetsParseSection from "../Sections/MailMergerTool/SheetsParseSection"
 import MailingSection from "../Sections/MailMergerTool/MailingSection"
 import SheetDataSection from "../Sections/MailMergerTool/SheetDataSection"
+import StepsNav from "../Sections/StepsNav"
+import SheetSelectSection from "../Sections/MailMergerTool/SheetSelectSection"
 
 const MailMerger = () => {
   const [companyEmailData, setCompanyEmailData] = useState([])
   const [step, setStep] = useState(1)
+  const [sheetLink, setSheetLink] = useState("")
+  const [sheetsList, setSheetsList] = useState([])
+  const [sheetName, setSheetName] = useState("")
+
   const getStepComponent = () => {
     switch (step) {
       case 1:
-        return <SheetsParseSection setCompanyEmailData={setCompanyEmailData} setStep={setStep} />
+        return <SheetsParseSection {...{ sheetLink, setSheetLink, setSheetsList, setStep }} />
       case 2:
-        return <SheetDataSection companyEmailData={companyEmailData} setStep={setStep} />
+        return <SheetSelectSection {...{ sheetsList, sheetLink, sheetName, setSheetName, setCompanyEmailData, setStep }} />
       case 3:
-        return <MailingSection companyEmailData={companyEmailData} setStep={setStep} />
+        return <MailingSection {...{companyEmailData,setStep}} />
       default:
         return <></>
     }
   }
   return (
-    <div className="h-full flex items-center justify-center gap-10 relative">
-      {step > 1 && <SheetsParseSection setCompanyEmailData={setCompanyEmailData} setStep={setStep} />}
-      {step > 2 && <SheetDataSection companyEmailData={companyEmailData} setStep={setStep} />}
-      {step > 3 && <MailingSection companyEmailData={companyEmailData} setStep={setStep} />}
-      {step < 4 && (
-        <div className="absolute top-0 left-0 rounded-2xl bg-[#1F509A]/80 w-full h-full flex items-center justify-center">
-          <div className="w-fit">{getStepComponent()}</div>
-        </div>
-      )}
+    <div className="h-full flex items-center">
+      <StepsNav curStep={step} />
+      <div className="w-[1px] mr-20 h-3/4 bg-black"></div>
+      <div className="w-full">{getStepComponent()}</div>
     </div>
   )
 }

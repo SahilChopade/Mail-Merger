@@ -1,8 +1,6 @@
 const axios = require("axios")
 const mailService = require("../services/mailService")
-const { transporter } = require("../services/transporter")
 
-const draftId = "r6835462327113036219"
 async function getDraftsList(req, res) {
   try {
     const draftsListResponse = await axios.get(`${process.env.MAIL_ENDPOINT}/me/drafts`, {
@@ -34,6 +32,7 @@ async function getDraftsList(req, res) {
 async function sendMassMail(req, res) {
   try {
     // Fetch draft message
+    const { draftId } = req.body
     const draftResponse = await axios.get(`${process.env.MAIL_ENDPOINT}/me/drafts/${draftId}?format=full`, {
       headers: {
         Authorization: `Bearer ${req.oAuth2.credentials.access_token}`,
@@ -77,14 +76,11 @@ async function sendMassMail(req, res) {
 
         // Send the email using transporter
         try {
-          const sendInfo = await transporter.sendMail(rawMessage)
-          console.log(`Email sent to ${item.email}: ${sendInfo.response}`)
+          const sendInfo = await mailService.sendMailUsingNodemailer(rawMessage, req.oAuth2.credentials.refresh_token, req.user.email)
         } catch (sendError) {
-          console.error(`Failed to send email to ${item.email}:`, sendError)
           return res.status(500).send({ success: false, message: `Failed to send email to ${item.email}` })
         }
       } catch (personalizationError) {
-        console.error(`Error personalizing email for ${item.email}:`, personalizationError)
         continue // Continue with the next email if personalization fails
       }
     }

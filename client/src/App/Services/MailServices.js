@@ -9,3 +9,11 @@ export const fetchDraftsList = async () => {
     console.log(error)
   }
 }
+export const sendMassMails = async ({ companyEmailData, draftId }) => {
+  try {
+    const response = await axios.post(`${BE_URL}/mail/sendmails`, { companyEmailData: companyEmailData, draftId: draftId }, { withCredentials: true })
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}

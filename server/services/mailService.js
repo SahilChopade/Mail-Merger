@@ -1,3 +1,5 @@
+const nodemailer = require("nodemailer")
+
 function getPersonalizedSubject(draft, company) {
   const originalSubject = draft.payload.headers.filter((item) => item.name === "Subject")[0].value
   const updatedSubject = originalSubject.replace("{{Company}}", company.companyName)
@@ -39,36 +41,19 @@ async function createRawMessage(email, subject, messageBody, attachments) {
   return mailOptions
 }
 
-// function getNewlyCreatedMail(email, subject, messageBody, attachments) {
-//   const emailData = [
-//     `To: ${email}`,
-//     'Content-Type: multipart/mixed; boundary="foo_bar_baz"',
-//     "MIME-Version: 1.0",
-//     `Subject: ${subject}`,
-//     "",
-//     "--foo_bar_baz",
-//     'Content-Type: text/plain; charset="UTF-8"',
-//     "Content-Transfer-Encoding: 7bit",
-//     "",
-//     messageBody, // Email body text
-//     "",
-//     "--foo_bar_baz",
-//   ]
-//   for (const part of attachments) {
-//     const tempData = [
-//       `Content-Type: ${part.mimeType}; name="${part.filename}"`, // MimeType and filename
-//       "Content-Transfer-Encoding: base64",
-//       `Content-Disposition: attachment; filename="${part.filename}"`,
-//       "",
-//       part.content, // Base64 encoded attachment content
-//       "--foo_bar_baz--", // Closing boundary}
-//       "",
-//     ]
-//     emailData.push(...tempData)
-//   }
-//   // emailData.pop();
-//   const joinedEmail = emailData.join("\n")
-//   return joinedEmail
-// }
+async function sendMailUsingNodemailer(rawMessage, token,email) {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      type: "OAuth2",
+      user: email,
+      clientId: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      refreshToken: token,
+    },
+  })
+  const data = await transporter.sendMail(rawMessage)
+  return data
+}
 
-module.exports = { getPersonalizedSubject, getPersonalizedBody, getAttachmentsForMail, createRawMessage }
+module.exports = { getPersonalizedSubject, getPersonalizedBody, getAttachmentsForMail, createRawMessage, sendMailUsingNodemailer }

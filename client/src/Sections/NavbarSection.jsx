@@ -18,6 +18,7 @@ const NavbarSection = () => {
         return "ToolKit"
     }
   }
+  console.log(user)
   return (
     <div className="flex w-full justify-between">
       <div className="font-saira text-5xl">{getHeading()}</div>

@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext } from "react"
 import { getUser, loginUser, logOutUser, setUserPassword } from "../App/Services/UserServices"
-import { loginUserUsingGoogle } from "../App/Services/AuthServices"
+import { loginUserUsingGoogle, signUpUserUsingGoogle } from "../App/Services/AuthServices"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 
@@ -15,13 +15,8 @@ export const AuthProvider = ({ children }) => {
     if (!res) return
     if (res.success) {
       setUser(res.data)
-      if (res.data.isPasswordSet) {
-        user && toast.success(`Welcome ${res.data.name}`)
-        navigate("/")
-      } else {
-        toast.info(`Welcome ${res.data.name.split(" ")[0]},Yet to Set Password..`)
-        navigate("/auth/password")
-      }
+      user && toast.success(`Welcome ${res.data.name}`)
+      navigate("/")
     }
   }
 
@@ -42,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     if (res.success) {
       setUser(null)
       toast.success("User logged out")
-      navigate("/auth/login")
+      navigate("/auth")
     } else {
       toast.error(res.message)
     }
@@ -64,8 +59,12 @@ export const AuthProvider = ({ children }) => {
     const response = await loginUserUsingGoogle()
     window.open(response, "_self")
   }
+  const googleSignUp = async () => {
+    const response = await signUpUserUsingGoogle()
+    window.open(response, "_self")
+  }
 
-  return <AuthContext.Provider value={{ user, userFetch, userLogin, userLogOut, setPasswordForUser, googleLogin }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ user, userFetch, userLogin, userLogOut, setPasswordForUser, googleLogin, googleSignUp }}>{children}</AuthContext.Provider>
 }
 
 // Custom hook for consuming the context

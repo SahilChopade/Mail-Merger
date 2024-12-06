@@ -25,7 +25,6 @@ export const logOutUser = async () => {
 export const getUser = async (id) => {
   try {
     const response = await axios.get(`${BE_URL}/user/getUser`, { withCredentials: true })
-    console.log(response)
     return response.data
   } catch (error) {
     console.log(error)

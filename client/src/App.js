@@ -12,7 +12,7 @@ const App = () => {
       <div className="bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#f1f8ff] from-10% to-[#ddeeff] to-70% w-full h-full rounded-3xl p-4">
         <Routes>
           <Route path="/*" element={<HomePage />} />
-          <Route path="/auth/*" element={<AuthorizationPage />} />
+          <Route path="/auth" element={<AuthorizationPage />} />
         </Routes>
       </div>
       <ToastContainer  />

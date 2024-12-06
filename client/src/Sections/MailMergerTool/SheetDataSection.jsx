@@ -8,18 +8,6 @@ const EmptyDataState = ({ setStep }) => {
         <div className="font-noto font-semibold text-xl">OOP's! No Data Found....</div>
         <div className="w-[20rem]">Please try again with a new sheet or attempt to refetch the data for the same sheet by navigating back.</div>
       </div>
-      <div className="flex w-full gap-2">
-        <div class="w-full bg-transparent items-center rounded-md justify-center flex border-2 border-[#db569f] shadow-lg hover:bg-[#db569f] text-[#db569f] hover:text-white duration-300 cursor-pointer active:scale-[0.98]">
-          <button onClick={() => setStep((prev) => prev - 1)} class="px-2 py-1.5">
-            Refetch
-          </button>
-        </div>
-        <div class="w-full bg-transparent items-center rounded-md justify-center flex border-2 border-[#db569f] shadow-lg hover:bg-[#db569f] text-[#db569f] hover:text-white duration-300 cursor-pointer active:scale-[0.98]">
-          <button onClick={() => setStep((prev) => prev + 1)} class="px-2 py-1.5">
-            Continue
-          </button>
-        </div>
-      </div>
     </div>
   )
 }
@@ -32,9 +20,9 @@ const SheetDataSection = ({ companyEmailData, setStep }) => {
     setHeaders(data)
   }, [companyEmailData])
   return companyEmailData.length ? (
-    <div className="flex flex-col justify-between gap-6 h-[450px] border border-slate-800 p-4 py-2 bg-[#afd0ee] rounded-lg">
-      <div className="flex flex-col gap-1 max-h-[350px] overflow-auto">
-        <div className="grid grid-cols-2 bg-gray-200 font-semibold rounded-t-lg sticky top-0">
+    <div className="flex flex-col gap-6 h-[450px] border border-slate-800 p-4 py-2 rounded-lg">
+      <div className="flex flex-col gap-1">
+        <div className="grid grid-cols-2 bg-[#afd0ee] font-semibold rounded-t-lg sticky top-0">
           {headers?.map((head, idx) => {
             return (
               <div className="flex capitalize px-2 py-1" key={idx} style={{ width: `${100 / headers.length}%` }}>
@@ -43,7 +31,7 @@ const SheetDataSection = ({ companyEmailData, setStep }) => {
             )
           })}
         </div>
-        <div className="bg-gray-200">
+        <div className="bg-[#afd0ee]  max-h-[300px] overflow-auto">
           {companyEmailData?.map((data, idx) => {
             return (
               <div className="grid grid-cols-2 border-t border-gray-300" key={idx}>
@@ -59,21 +47,7 @@ const SheetDataSection = ({ companyEmailData, setStep }) => {
           })}
         </div>
       </div>
-      <div className="flex flex-col gap-2">
-        <div>The above table shows the data going to be used to send emails.</div>
-        <div className="flex w-full gap-2">
-          <div class="w-full bg-transparent items-center rounded-md justify-center flex border-2 border-[#db569f] shadow-lg hover:bg-[#db569f] text-[#db569f] hover:text-white duration-300 cursor-pointer active:scale-[0.98]">
-            <button onClick={() => setStep((prev) => prev - 1)} class="px-2 py-1.5">
-              Refetch
-            </button>
-          </div>
-          <div class="w-full bg-transparent items-center rounded-md justify-center flex border-2 border-[#db569f] shadow-lg hover:bg-[#db569f] text-[#db569f] hover:text-white duration-300 cursor-pointer active:scale-[0.98]">
-            <button onClick={() => setStep((prev) => prev + 1)} class="px-2 py-1.5">
-              Continue
-            </button>
-          </div>
-        </div>
-      </div>
+      <div>The above table shows the data going to be used to send emails.</div>
     </div>
   ) : (
     <EmptyDataState setStep={setStep} />

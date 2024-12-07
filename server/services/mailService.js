@@ -1,5 +1,21 @@
 const nodemailer = require("nodemailer")
 
+function processArray(lines) {
+  let result = ""
+  for (let i = 0; i < lines.length; i++) {
+    const current = lines[i]
+    const next = lines[i + 1] || ""
+    if (current === "") {
+      result += "\n"
+    } else if (current.endsWith(" ")) {
+      result += current + next
+    } else {
+      result += current + "\n"
+    }
+  }
+  return result.trim()
+}
+
 function getPersonalizedSubject(draft, company) {
   const originalSubject = draft.payload.headers.filter((item) => item.name === "Subject")[0].value
   const updatedSubject = originalSubject.replace("{{Company}}", company.companyName)
@@ -9,7 +25,8 @@ function getPersonalizedBody(draft, company) {
   const bodyPart = draft.payload.parts[0].parts.find((part) => part.mimeType === "text/plain")
   const originalBody = bodyPart ? Buffer.from(bodyPart.body.data, "base64").toString("utf8") : ""
   const updatedBody = originalBody.replace("{{Company}}", company.companyName)
-  return updatedBody
+  const lines = updatedBody.split(/\r\n|\n|\r/)
+  return processArray(lines)
 }
 function getAttachmentsForMail(draft) {
   const attachments = draft.payload.parts.slice(1).map((part) => {
@@ -22,7 +39,7 @@ function getAttachmentsForMail(draft) {
   })
   return attachments
 }
-async function createRawMessage(email, subject, messageBody, attachments) {
+async function createRawMessage(email, subject, messageBody, attachments, user) {
   const attachmentsFormatted = attachments.map((item) => {
     return {
       filename: item.filename,
@@ -32,7 +49,7 @@ async function createRawMessage(email, subject, messageBody, attachments) {
     }
   })
   const mailOptions = {
-    from: "iit.sahil2024@gmail.com",
+    from: `${user.displayName} <${user.email}>`,
     to: email,
     subject: subject,
     text: messageBody,
@@ -41,7 +58,7 @@ async function createRawMessage(email, subject, messageBody, attachments) {
   return mailOptions
 }
 
-async function sendMailUsingNodemailer(rawMessage, token,email) {
+async function sendMailUsingNodemailer(rawMessage, token, email) {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {

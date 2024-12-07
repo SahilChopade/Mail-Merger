@@ -1,5 +1,4 @@
 import React from "react"
-import NavbarSection from "../Sections/NavbarSection"
 import ToolCard from "../Components/ToolCard"
 import { toolsData } from "../Data/ToolsData"
 

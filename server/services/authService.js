@@ -13,6 +13,8 @@ async function addUserToDb(data, tokens) {
         isPasswordSet: false,
       })
       await user.save()
+    } else {
+      await User.updateOne({ googleId: data.resourceName }, { refreshToken: tokens.refresh_token })
     }
     return user
   } catch (error) {

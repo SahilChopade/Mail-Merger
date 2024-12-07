@@ -12,6 +12,14 @@ async function authDirect(req, res) {
   })
   return res.send(authUrl)
 }
+async function authSignUpDirect(req, res) {
+  const authUrl = oAuth2.generateAuthUrl({
+    access_type: "offline", // This ensures we get a refresh token
+    scope: SCOPES,
+    prompt: "consent",
+  })
+  return res.send(authUrl)
+}
 
 async function authCallback(req, res) {
   const code = req.query.code
@@ -30,11 +38,11 @@ async function authCallback(req, res) {
       secure: false, // Set to `true` if using HTTPS
       sameSite: "strict", // Protects against CSRF attacks
     })
-    return res.redirect(`${process.env.FE_URL}/auth/login`)
+    return res.redirect(`${process.env.FE_URL}/auth`)
   } catch (error) {
     console.log(error)
     return res.status(500).send("Error during authentication.")
   }
 }
 
-module.exports = { authDirect, authCallback }
+module.exports = { authDirect,authSignUpDirect, authCallback }

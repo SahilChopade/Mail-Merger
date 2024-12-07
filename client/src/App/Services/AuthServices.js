@@ -9,3 +9,11 @@ export const loginUserUsingGoogle = async () => {
     console.log(error)
   }
 }
+export const signUpUserUsingGoogle = async () => {
+  try {
+    const response = await axios.get(`${BE_URL}/api/authsignup`)
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}
